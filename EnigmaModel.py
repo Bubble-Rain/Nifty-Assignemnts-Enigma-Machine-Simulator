@@ -31,23 +31,23 @@ class EnigmaModel:
 
     def is_lamp_on(self, letter):
         return self._lamp_on_dict[letter]
+    
+    def get_encrypted_key(self, letter):
+
+        fast_rotor = self._rotors[2]
+        return apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+
 
     def key_pressed(self, letter):
         self._key_pressed_dict[letter] = True
-
-        fast_rotor = self._rotors[2]
-        encrypted_letter = apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+        encrypted_letter = self.get_encrypted_key(letter)
         self._lamp_on_dict[encrypted_letter] = True
-
         self.update()
 
     def key_released(self, letter):
         self._key_pressed_dict[letter] = False
-
-        fast_rotor = self._rotors[2]
-        encrypted_letter = apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+        encrypted_letter = self.get_encrypted_key(letter)
         self._lamp_on_dict[encrypted_letter] = False
-
         self.update()
 
     def get_rotor_letter(self, index):

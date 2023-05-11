@@ -16,6 +16,7 @@ class EnigmaModel:
         self._key_pressed_dict = dict.fromkeys(string.ascii_uppercase, 0)
         self._lamp_on_dict = dict.fromkeys(string.ascii_uppercase, 0)
         self._rotors = [EnigmaRotor(EnigmaConstants.ROTOR_PERMUTATIONS[i]) for i in range(3)]
+        self._rotors.append(EnigmaRotor(EnigmaConstants.REFLECTOR_PERMUTATION))
 
     def add_view(self, view):
         """Adds a view to this model."""
@@ -34,9 +35,22 @@ class EnigmaModel:
     
     def get_encrypted_key(self, letter):
 
+        reflection_rotor = self._rotors[3]
         fast_rotor = self._rotors[2]
-        return apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+        medium_rotor = self._rotors[1]
+        slow_rotor = self._rotors[0]
+        
+        fast_letter = apply_permutation(letter, fast_rotor.get_r_l_permutation(), fast_rotor.get_offset())
+        medium_letter = apply_permutation(fast_letter, medium_rotor.get_r_l_permutation(), medium_rotor.get_offset())
+        slow_letter = apply_permutation(medium_letter, slow_rotor.get_r_l_permutation(), slow_rotor.get_offset())
 
+        reflection_letter = apply_permutation(slow_letter, reflection_rotor.get_r_l_permutation(), reflection_rotor.get_offset())
+
+        slow_letter = apply_permutation(reflection_letter, slow_rotor.get_l_r_permutation(), slow_rotor.get_offset())
+        medium_letter = apply_permutation(slow_letter , medium_rotor.get_l_r_permutation(), medium_rotor.get_offset())
+        fast_letter = apply_permutation(medium_letter, fast_rotor.get_l_r_permutation(), fast_rotor.get_offset())
+        
+        return fast_letter
 
     def key_pressed(self, letter):
         self._key_pressed_dict[letter] = True

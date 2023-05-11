@@ -15,6 +15,7 @@ class EnigmaModel:
         self._views = [ ]
         self._key_pressed_dict = dict.fromkeys(string.ascii_uppercase, 0)
         self._lamp_on_dict = dict.fromkeys(string.ascii_uppercase, 0)
+        self._rotors = [EnigmaRotor(EnigmaConstants.ROTOR_PERMUTATIONS[i]) for i in range(3)]
 
     def add_view(self, view):
         """Adds a view to this model."""
@@ -42,18 +43,17 @@ class EnigmaModel:
         self.update()
 
     def get_rotor_letter(self, index):
-        return "A"          # In the stub version, all rotors are set to "A"
+        rotor_offset = self._rotors[index].get_offset()
+        return EnigmaConstants.ALPHABET[rotor_offset]
 
     def rotor_clicked(self, index):
-        # You need to fill in this code
+        self._rotors[index].advance()
         self.update()
 
 def enigma():
     """Runs the Enigma simulator."""
     model = EnigmaModel()
     view = EnigmaView(model)
-
-    print(EnigmaConstants.ALPHABET) 
     model.add_view(view)
 
 # Startup code

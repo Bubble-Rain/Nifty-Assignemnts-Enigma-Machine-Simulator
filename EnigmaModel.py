@@ -33,34 +33,57 @@ class EnigmaModel:
     def is_lamp_on(self, letter):
         return self._lamp_on_dict[letter]
     
-    def get_encrypted_key(self, letter):
+    def get_encrypted_key(self, letter, is_key_press):
 
         reflection_rotor = self._rotors[3]
         fast_rotor = self._rotors[2]
         medium_rotor = self._rotors[1]
         slow_rotor = self._rotors[0]
-        
+
+        """
+        if is_key_press:
+            
+            fast_rotor.advance()
+            fast_rotor_offset = fast_rotor.get_offset()
+
+            print(fast_rotor_offset)
+            print(self._rotors[2].get_offset())
+
+            if fast_rotor_offset == 0:
+
+                medium_rotor.advance()
+                medium_rotor_offset = medium_rotor.get_offset()
+
+                if medium_rotor_offset == 0:
+
+                    slow_rotor.advance()
+        """
+
+        # Right to left encryption
         fast_letter = apply_permutation(letter, fast_rotor.get_r_l_permutation(), fast_rotor.get_offset())
         medium_letter = apply_permutation(fast_letter, medium_rotor.get_r_l_permutation(), medium_rotor.get_offset())
         slow_letter = apply_permutation(medium_letter, slow_rotor.get_r_l_permutation(), slow_rotor.get_offset())
 
+
         reflection_letter = apply_permutation(slow_letter, reflection_rotor.get_r_l_permutation(), reflection_rotor.get_offset())
 
+        # Left to right encryption
         slow_letter = apply_permutation(reflection_letter, slow_rotor.get_l_r_permutation(), slow_rotor.get_offset())
         medium_letter = apply_permutation(slow_letter , medium_rotor.get_l_r_permutation(), medium_rotor.get_offset())
         fast_letter = apply_permutation(medium_letter, fast_rotor.get_l_r_permutation(), fast_rotor.get_offset())
         
+
         return fast_letter
 
     def key_pressed(self, letter):
         self._key_pressed_dict[letter] = True
-        encrypted_letter = self.get_encrypted_key(letter)
+        encrypted_letter = self.get_encrypted_key(letter, True)
         self._lamp_on_dict[encrypted_letter] = True
         self.update()
 
     def key_released(self, letter):
         self._key_pressed_dict[letter] = False
-        encrypted_letter = self.get_encrypted_key(letter)
+        encrypted_letter = self.get_encrypted_key(letter, False)
         self._lamp_on_dict[encrypted_letter] = False
         self.update()
 

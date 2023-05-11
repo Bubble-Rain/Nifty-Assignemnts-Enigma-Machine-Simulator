@@ -5,12 +5,12 @@ from EnigmaConstants import ALPHABET
 def apply_permutation(letter, permutation, offset):
 
     index = ALPHABET.find(letter)
-    rotor_index = (index + offset) % 25
+    rotor_index = (index + offset) % 26
     
     new_char = permutation[rotor_index]
     new_char_index = ALPHABET.find(new_char)
 
-    final_char_index = (new_char_index - offset) % 25 
+    final_char_index = (new_char_index - offset) % 26
     return ALPHABET[final_char_index]
 
 

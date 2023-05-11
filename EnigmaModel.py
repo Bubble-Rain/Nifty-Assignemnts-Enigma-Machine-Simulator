@@ -40,7 +40,7 @@ class EnigmaModel:
         medium_rotor = self._rotors[1]
         slow_rotor = self._rotors[0]
 
-        """
+        
         if is_key_press:
             
             fast_rotor.advance()
@@ -57,13 +57,12 @@ class EnigmaModel:
                 if medium_rotor_offset == 0:
 
                     slow_rotor.advance()
-        """
+
 
         # Right to left encryption
         fast_letter = apply_permutation(letter, fast_rotor.get_r_l_permutation(), fast_rotor.get_offset())
         medium_letter = apply_permutation(fast_letter, medium_rotor.get_r_l_permutation(), medium_rotor.get_offset())
         slow_letter = apply_permutation(medium_letter, slow_rotor.get_r_l_permutation(), slow_rotor.get_offset())
-
 
         reflection_letter = apply_permutation(slow_letter, reflection_rotor.get_r_l_permutation(), reflection_rotor.get_offset())
 

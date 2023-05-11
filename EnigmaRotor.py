@@ -1,5 +1,19 @@
 # File: EnigmaRotor.py
 
+from EnigmaConstants import ALPHABET
+
+def apply_permutation(letter, permutation, offset):
+
+    index = ALPHABET.find(letter)
+
+    # Indexed to 0
+    rotor_index = (index + offset) % 25
+    new_char = permutation[rotor_index]
+    
+    new_char_index = ALPHABET.find(new_char)
+    final_char_index = (new_char_index - offset) % 25 
+    return ALPHABET[final_char_index]
+    
 class EnigmaRotor:
 
     def __init__(self, initial_permutation):
@@ -19,4 +33,6 @@ class EnigmaRotor:
         # Reset once full revolution
         if self._offset > 25 :
             self._offset = 0
+    
+    
     

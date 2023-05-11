@@ -6,7 +6,7 @@ import EnigmaConstants
 import string
 
 from EnigmaView import EnigmaView
-from EnigmaRotor import EnigmaRotor
+from EnigmaRotor import EnigmaRotor, apply_permutation
 
 class EnigmaModel:
 
@@ -34,12 +34,20 @@ class EnigmaModel:
 
     def key_pressed(self, letter):
         self._key_pressed_dict[letter] = True
-        self._lamp_on_dict[letter] = True
+
+        fast_rotor = self._rotors[2]
+        encrypted_letter = apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+        self._lamp_on_dict[encrypted_letter] = True
+
         self.update()
 
     def key_released(self, letter):
         self._key_pressed_dict[letter] = False
-        self._lamp_on_dict[letter] = False
+
+        fast_rotor = self._rotors[2]
+        encrypted_letter = apply_permutation(letter, fast_rotor.get_permutation(), fast_rotor.get_offset())
+        self._lamp_on_dict[encrypted_letter] = False
+
         self.update()
 
     def get_rotor_letter(self, index):

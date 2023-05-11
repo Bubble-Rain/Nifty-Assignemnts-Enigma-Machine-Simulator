@@ -2,8 +2,11 @@
 
 """ This is the starter file for the Enigma project. """
 
-from EnigmaView import EnigmaView
+import EnigmaConstants
 import string
+
+from EnigmaView import EnigmaView
+from EnigmaRotor import EnigmaRotor
 
 class EnigmaModel:
 
@@ -49,6 +52,8 @@ def enigma():
     """Runs the Enigma simulator."""
     model = EnigmaModel()
     view = EnigmaView(model)
+
+    print(EnigmaConstants.ALPHABET) 
     model.add_view(view)
 
 # Startup code
